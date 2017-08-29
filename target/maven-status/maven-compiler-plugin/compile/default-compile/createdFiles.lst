@@ -1,0 +1,9 @@
+org\tjut\bishe\bean\FileBean.class
+org\tjut\bishe\controller\Usercontroller.class
+org\tjut\bishe\dao\Commondao.class
+org\tjut\bishe\bean\UserBean.class
+org\tjut\bishe\controller\Commoncontroller.class
+org\tjut\bishe\dao\Userdao.class
+org\tjut\bishe\service\Userservice.class
+org\tjut\bishe\service\Commonservice.class
+org\tjut\bishe\intercepter\Userintercepter.class

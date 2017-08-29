@@ -1,0 +1,35 @@
+.style1 {
+	border-bottom-color: #FFCE02;
+	border-right-color: #FFCE02;
+}
+
+a {
+	color: #FFCE02;
+}
+
+font {
+	color: #FFCE02;
+}
+
+.style2 {
+	border-color: #FFCE02;
+}
+
+.btn-success {
+	color: #fff;
+	background-color: #FFCE02;
+	border-color: #FFCE02;
+}
+
+.btn-success:focus,
+.btn-success.focus {
+	color: ff;
+	backgro#fund-color: #FFCE02;
+	border-color: #FFCE02;
+}
+
+.btn-success:hover {
+	color: #fff;
+	background-color: #FFCE02;
+	border-color: #FFCE02;
+}

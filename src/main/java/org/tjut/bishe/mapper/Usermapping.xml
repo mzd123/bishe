@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tjut.bishe.dao.Userdao">
+	<!-- 查询部分 -->
+	<select id="loginD" resultType="org.tjut.bishe.bean.UserBean">
+		SELECT * FROM BISHEUSER WHERE
+		NICHENG=#{nicheng} AND PASSWORD=#{password}
+	</select>
+	<select id="searchuploadD" resultType="org.tjut.bishe.bean.FileBean">
+		SELECT * FROM BISHEFILE
+		<where>
+			<if test="leixing!=null">
+				and leixing LIKE CONCAT(
+				CONCAT('%',#{leixing}),'%')
+			</if>
+			<if test="state!=null">
+				and state LIKE CONCAT(
+				CONCAT('%',#{state}),'%')
+			</if>
+			<if test="nicheng!=null">
+				and nicheng LIKE CONCAT(
+				CONCAT('%',#{nicheng}),'%')
+			</if>
+		</where>
+	</select>
+	<select id="searchuploadDhavestart_end_timeD" resultType="org.tjut.bishe.bean.FileBean">
+		SELECT * FROM BISHEFILE
+		<where>
+			<if test="leixing!=null">
+				and leixing LIKE CONCAT(
+				CONCAT('%',#{leixing}),'%')
+			</if>
+			<if test="state!=null">
+				and state LIKE CONCAT(
+				CONCAT('%',#{state}),'%')
+			</if>
+			<if test="uploadtime!=null">
+				and uploadtime LIKE CONCAT(
+				CONCAT('%',#{uploadtime}),'%')
+			</if>
+			<if test="nicheng!=null">
+				and nicheng LIKE CONCAT(
+				CONCAT('%',#{nicheng}),'%')
+			</if>
+		</where>
+		AND TO_CHAR(UPLOADTIME,'yyyy-mm-dd') BETWEEN
+		#{starttime,jdbcType=VARCHAR}
+		AND #{endtime,jdbcType=VARCHAR}
+	</select>
+
+	<select id="searchfilebyidD" resultType="org.tjut.bishe.bean.FileBean">
+		SELECT * FROM BISHEFILE
+		WHERE
+		FILEID=#{fileid}
+	</select>
+	<select id="selectfriendsbynichengD" resultType="org.tjut.bishe.bean.FriendBean">
+		SELECT * FROM
+		BISHEFRIEND WHERE NICHENG LIKE CONCAT(
+		CONCAT('%',#{nicheng}),'%')
+	</select>
+	<select id="selectfriendsharebynichengD" resultType="org.tjut.bishe.bean.FileBean">
+		SELECT *
+		FROM
+		BISHEFILE WHERE NICHENG=#{nicheng} AND STATE='分享'
+	</select>
+	<select id="selectfilebysearchD" resultType="org.tjut.bishe.bean.FileBean">
+		SELECT * FROM
+		BISHEFILE WHERE
+		FILENAME LIKE CONCAT(
+		CONCAT('%',#{filename,jdbcType=VARCHAR}),'%') AND STATE='公开'
+	</select>
+	<select id="selectfriendsbyfriendnichengD" resultType="org.tjut.bishe.bean.FriendBean">
+		SELECT * FROM BISHEFRIEND
+		<where>
+			<if test="nicheng!=null">
+				and nicheng LIKE CONCAT(
+				CONCAT('%',#{nicheng}),'%')
+			</if>
+			<if test="fnicheng!=null">
+				and fnicheng LIKE CONCAT(
+				CONCAT('%',#{fnicheng}),'%')
+			</if>
+		</where>
+	</select>
+	<select id="selectuserallmessagebynichengD" resultType="org.tjut.bishe.bean.UserBean">
+		SELECT *
+		FROM BISHEUSER WHERE NICHENG=#{nicheng}
+	</select>
+	<select id="selectcountsharebyfnichengD" resultType="int">
+		SELECT
+		COUNT(*) FROM BISHEFILE WHERE
+		NICHENG=#{nicheng} AND STATE='分享'
+	</select>
+	<select id="selectsharefilebyfriendnichengD" resultType="org.tjut.bishe.bean.FileBean">
+		SELECT *
+		FROM BISHEFILE WHERE NICHENG=#{nicheng} AND STATE='分享'
+	</select>
+	<select id="selectuserbynichengD" resultType="org.tjut.bishe.bean.UserBean">
+		SELECT * FROM
+		BISHEUSER WHERE NICHENG LIKE CONCAT(
+		CONCAT('%',#{nicheng}),'%')
+	</select>
+	<select id="selectalladviceD" resultType="org.tjut.bishe.bean.AdviceBean">
+		SELECT * FROM
+		BISHECOMMENT
+	</select>
+	<!-- 修改部分 -->
+	<update id="modifymyselfD" parameterType="org.tjut.bishe.bean.UserBean">
+		UPDATE BISHEUSER SET
+		PASSWORD=#{password},EMAIL=#{email},QIANMING=#{qianming} WHERE
+		NICHENG=#{nicheng}
+	</update>
+	<update id="adddowntime" parameterType="org.tjut.bishe.bean.FileBean">
+		UPDATE BISHEFILE SET
+		DOWNTIMES=#{downtimes} WHERE FILEID=#{fileid}
+	</update>
+	<!-- 增加部分 -->
+	<insert id="uploadD" parameterType="org.tjut.bishe.bean.FileBean">
+		INSERT INTO
+		BISHEFILE(FILENAME,LEIXING,UPLOADTIME,STATE,NICHENG)VALUES(#{filename},#{leixing},SYSDATE,#{state},#{nicheng})
+	</insert>
+	<insert id="addmyfriendD" parameterType="org.tjut.bishe.bean.FriendBean">
+		INSERT INTO
+		BISHEFRIEND(NICHENG,FNICHENG,ADDTIME)VALUES(#{nicheng},#{fnicheng},SYSDATE)
+	</insert>
+	<insert id="addadviceD" parameterType="org.tjut.bishe.bean.AdviceBean">
+		INSERT INTO
+		BISHECOMMENT(NICHENG,TIME,CONTENT)VALUES(#{nicheng},SYSDATE,#{content})
+	</insert>
+	<!-- 删除部分 -->
+	<delete id="deletefilebyidD" parameterType="org.tjut.bishe.bean.FileBean">
+		DELETE BISHEFILE
+		WHERE FILEID=#{fileid}
+	</delete>
+	<delete id="deletetmyfriendbynichengD" parameterType="org.tjut.bishe.bean.FriendBean">
+		DELETE
+		BISHEFRIEND WHERE NICHENG=#{nicheng} AND FNICHENG=#{fnicheng}
+	</delete>
+</mapper>

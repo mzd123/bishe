@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 自动扫描该控制器层的包，包路径指到控制层包路径 -->
+	<context:component-scan base-package="org.tjut.bishe.controller"></context:component-scan>
+
+	<!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->
+	<!--该方法在spring3.2后已经过时了，用下面的方法即可 -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"> 
+		</bean> -->
+	<!--Spring3.2开始的注解 HandlerMapping -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+	<!--Spring3.2开始的注解 HandlerAdapter -->
+	<mvc:annotation-driven validator="validator" />
+	<!-- 定义一个生产校验器工厂的bean -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<!-- 使用hibernate提供的验证类的生成器 -->
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator"></property>
+		<!-- 设置使用国际资源文件 -->
+		<property name="validationMessageSource" ref="messageSource"></property>
+	</bean>
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="104857600" />
+		<property name="maxInMemorySize" value="4096" />
+		<property name="defaultEncoding" value="UTF-8"></property>
+	</bean>
+
+	<!-- ========拦截器的配置========= -->
+	<mvc:interceptors>
+		<!-- 用于用户登入身份验证拦截器 -->
+		<mvc:interceptor>
+			<!-- 该拦截器拦截路径映射 -->
+			<mvc:mapping path="/**" />
+			<!-- 该拦截器的实现类 -->
+			<bean id="Userintercepter" class="org.tjut.bishe.intercepter.Userintercepter"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+
+
+
+	<!-- 定义跳转的文件的url路径中的前缀和后缀 ，视图模式配置 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- action的方法return的字符串会自动加上前缀和后缀，变成一个的url地址 例如：action方法中返回的 内容是 “logined” 
+			字符串，那么该配置就是在返回的字符串加上前缀和后缀 变成了： /WEB-INF/views/logined.jsp,作为跳转的url -->
+		<!-- 前缀 -->
+		<property name="prefix" value="/" />
+		<!-- 后缀 -->
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+</beans>

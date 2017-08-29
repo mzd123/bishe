@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tjut.bishe.dao.Commondao">
+	<select id="beforelogin_ishavenichengD" resultType="org.tjut.bishe.bean.UserBean">
+		SELECT * FROM
+		BISHEUSER WHERE NICHENG=#{nicheng,jdbcType=VARCHAR}
+	</select>
+	<insert id="beforelogin_registerD" parameterType="org.tjut.bishe.bean.UserBean">
+		INSERT INTO
+		BISHEUSER(NICHENG,PASSWORD,EMAIL)VALUES(#{nicheng},#{password},#{email})
+	</insert>
+</mapper>
